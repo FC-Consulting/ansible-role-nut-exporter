@@ -49,7 +49,7 @@ None.
 
     - hosts: all
       roles:
-        - role: fcconsulting.nut_exporter
+        - role: fc_consulting.nut_exporter
 
 ## License
 

@@ -10,4 +10,4 @@
       changed_when: false
 
   roles:
-    - role: fcconsulting.nut_exporter
+    - role: fc_consulting.nut_exporter
