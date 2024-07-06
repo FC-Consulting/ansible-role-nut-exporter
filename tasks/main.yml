@@ -1,0 +1,65 @@
+---
+- name: Check current nut_exporter version.
+  command: "{{ nut_exporter_bin_path }} --version"
+  failed_when: false
+  changed_when: false
+  register: nut_exporter_version_check
+
+- name: Configure latest version
+  include_tasks: config-version.yaml
+  when: >
+    nut_exporter_version is match("latest")
+    or nut_exporter_version is not defined
+
+- name: Download nut_exporter into temporary location.
+  get_url:
+    url: "{{ nut_exporter_download_url }}"
+    dest: /tmp
+    mode: 0755
+  when: >
+    nut_exporter_version_check.stdout is not defined
+    or nut_exporter_version not in nut_exporter_version_check.stdout
+  register: nut_exporter_download_check
+
+- name: Move nut_exporter binary into place.
+  copy:
+    src: "/tmp/nut_exporter-v{{ nut_exporter_version }}-linux-{{ nut_exporter_arch }}"
+    dest: "{{ nut_exporter_bin_path }}"
+    mode: 0755
+    remote_src: true
+  notify: restart nut_exporter
+  when: >
+    nut_exporter_download_check is changed
+    or nut_exporter_version_check.stdout | length == 0
+
+- name: Create nut_exporter user.
+  user:
+    name: nut_exporter
+    shell: /sbin/nologin
+    state: present
+
+- name: Copy the nut_exporter systemd unit file.
+  template:
+    src: nut_exporter.service.j2
+    dest: /etc/systemd/system/nut_exporter.service
+    mode: 0644
+  register: nut_exporter_service
+
+- name: Reload systemd daemon if unit file is changed.
+  systemd:
+    daemon_reload: true
+  notify: restart nut_exporter
+  when: nut_exporter_service is changed
+
+- name: Ensure nut_exporter is running and enabled at boot.
+  service:
+    name: nut_exporter
+    state: "{{ nut_exporter_state }}"
+    enabled: "{{ nut_exporter_enabled }}"
+
+- name: Verify nut_exporter is responding to requests.
+  uri:
+    url: "http://{% if nut_exporter_host !='' %}{{ nut_exporter_host }}{% else %}localhost{% endif %}:{{ nut_exporter_port }}/"
+    return_content: true
+  register: metrics_output
+  failed_when: "'NUT Exporter' not in metrics_output.content"

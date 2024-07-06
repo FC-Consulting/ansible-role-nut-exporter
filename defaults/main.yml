@@ -1,0 +1,21 @@
+---
+# Use the latest nut_exporter release
+nut_exporter_version: 'latest'
+
+# Alternatively, set a specific version
+# See available releases: https://github.com/DRuggeri/nut_exporter/releases/
+# nut_exporter_version: '3.1.1'
+
+nut_exporter_arch: 'amd64'
+nut_exporter_download_url: https://github.com/DRuggeri/nut_exporter/releases/download/v{{ nut_exporter_version }}/nut_exporter-v{{ nut_exporter_version }}-linux-{{ nut_exporter_arch }}
+
+nut_exporter_bin_path: /usr/local/bin/nut_exporter
+
+# Set nut_exporter_host to localhost if you wish to expose nut_exporter on localhost only.
+nut_exporter_host: ''
+nut_exporter_port: 9199
+nut_exporter_options: ''
+
+nut_exporter_state: started
+nut_exporter_enabled: true
+nut_exporter_restart: on-failure

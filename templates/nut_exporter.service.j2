@@ -1,0 +1,11 @@
+[Unit]
+Description=NutExporter
+
+[Service]
+TimeoutStartSec=0
+User=nut_exporter
+ExecStart={{ nut_exporter_bin_path }} --web.listen-address={{ nut_exporter_host }}:{{ nut_exporter_port }} {{ nut_exporter_options }}
+Restart={{ nut_exporter_restart }}
+
+[Install]
+WantedBy=multi-user.target

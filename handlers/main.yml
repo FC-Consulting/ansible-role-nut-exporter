@@ -1,0 +1,5 @@
+---
+- name: restart nut_exporter
+  service:
+    name: nut_exporter
+    state: restarted
