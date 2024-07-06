@@ -1,6 +1,7 @@
 # Ansible Role: Network UPS Tools exporter
 
-[![CI](https://github.com/FC-Consulting/ansible-role-nut-exporter/workflows/CI/badge.svg?event=push)](https://github.com/FC-Consulting/ansible-role-nut-exporter/actions?query=workflow%3ACI)
+[![CI](https://github.com/FC-Consulting/ansible-role-nut-exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/FC-Consulting/ansible-role-nut-exporter/actions/workflows/ci.yml)
+[![Release](https://github.com/FC-Consulting/ansible-role-nut-exporter/actions/workflows/release.yml/badge.svg)](https://github.com/FC-Consulting/ansible-role-nut-exporter/actions/workflows/release.yml)
 
 This role installs Prometheus' [NUT exporter](https://github.com/DRuggeri/nut_exporter) on Linux hosts, and configures a systemd unit file so the service can run and be controlled by systemd.
 
